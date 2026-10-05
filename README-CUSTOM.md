@@ -56,13 +56,30 @@ FFmpegKit.execute('-i input.mp4 -c:v mpeg4 output.mp4').then(async (session) => 
 - No external libraries (gnutls, gmp, etc.) are included
 - iOS binaries are not included in this build
 
+### iOS projects
+
+The podspec still depends on the upstream `ffmpeg-kit-ios-*` pods, whose
+binaries were deleted when FFmpegKit was retired (the download now returns
+404), so `pod install` fails for any app that autolinks this package on iOS.
+Exclude it from iOS autolinking in your app's `react-native.config.js`:
+
+```js
+module.exports = {
+  dependencies: {
+    'ffmpeg-kit-react-native': {
+      platforms: { ios: null },
+    },
+  },
+};
+```
+
 ## Building from Source
 
 If you want to rebuild the binaries:
 
-1. Clone this repository
+1. Clone [sheehanmunim/react-native-ffmpeg](https://github.com/sheehanmunim/react-native-ffmpeg), which contains the FFmpegKit build scripts (this repository only holds the React Native package)
 2. Set up Android SDK and NDK (version 26.x recommended)
-3. Run the build script:
+3. Run the build script from that repository's root:
 
 ```bash
 export ANDROID_SDK_ROOT=/path/to/android/sdk
